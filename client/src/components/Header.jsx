@@ -1,5 +1,7 @@
 import { NavLink } from "react-router-dom";
 import "../Styles/Header.scss";
+import { LoginButton } from "../components/LoginButton";
+import LogoutButton from '../components/LogoutButton';
 
 const Layout = () => {
   return (
@@ -23,13 +25,16 @@ const Layout = () => {
         >
           Progress
         </NavLink>
-        <NavLink
+
+        <LoginButton />
+        <LogoutButton />
+        {/* <NavLink
           to="/login"
           className="navBar__link"
           activeClassName="navBar__selected"
         >
           Login
-        </NavLink>
+        </NavLink> */}
       </nav>
     </div>
   );
