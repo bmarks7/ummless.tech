@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import SpeechSummaryTable from "./SpeechSummaryTable";
+import "../Styles/SpeechSummary.scss";
 
 const SpeechSummary = () => {
   const [data, setData] = useState(null);
@@ -16,7 +17,7 @@ const SpeechSummary = () => {
 
   return (
     <div>
-      <h1>Speech Summary</h1>
+      <h1 className="title">Speech Summary</h1>
       <SpeechSummaryTable data={data} />
     </div>
   );

@@ -1,0 +1,24 @@
+@import "Variables.scss";
+
+.title {
+  color: $darkest-blue;
+}
+
+.data {
+  text-align: right;
+
+  &__positive {
+    padding-left: 3em;
+    font-size: 1.2em;
+    font-weight: 700;
+    text-align: right;
+    color: #2db42d;
+  }
+
+  &__negative {
+    text-align: right;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #f76c6c;
+  }
+}

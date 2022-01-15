@@ -1,4 +1,4 @@
-import React from "react";
+import "../Styles/SpeechSummary.scss";
 
 const SpeechSummaryTable = ({ data }) => {
   if (!data) {
@@ -9,27 +9,47 @@ const SpeechSummaryTable = ({ data }) => {
     <table>
       <tr>
         <td>
-          <h3>Filler Words per Minute</h3>
+          <h3 className="title">Filler Words per Minute</h3>
         </td>
-        <td>{data.fillerWPM}</td>
+        <td
+          className={data.fillerWPM < 3 ? "data__positive" : "data__negative"}
+        >
+          {data.fillerWPM}
+        </td>
       </tr>
       <tr>
         <td>
-          <h3>Speaking Speed</h3>
+          <h3 className="title">Speaking Speed</h3>
         </td>
-        <td>{data.speed}</td>
+        <td
+          className={
+            data.speed > 120 && data.speed < 140
+              ? "data__positive"
+              : "data__negative"
+          }
+        >
+          {data.speed}
+        </td>
       </tr>
       <tr>
         <td>
-          <h3>Average Sentiment</h3>
+          <h3 className="title">Average Sentiment</h3>
         </td>
-        <td>{data.averageSentiment}</td>
+        <td
+          className={
+            data.averageSentiment > 0 ? "data__positive" : "data__negative"
+          }
+        >
+          {data.averageSentiment}
+        </td>
       </tr>
       <tr>
         <td>
-          <h2>Score</h2>
+          <h2 className="title">Score</h2>
         </td>
-        <td>{data.score}</td>
+        <td className={data.score >= 70 ? "data__positive" : "data__negative"}>
+          <h2>{data.score}</h2>
+        </td>
       </tr>
     </table>
   );
