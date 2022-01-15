@@ -1,11 +1,12 @@
 import "./App.scss";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Header from "./components/Header";
 
 function App() {
   return (
-    <div className="App">
-      <h1>Home</h1>
-      <Link to="/progress">Progress</Link>
+    <div>
+      <Header />
+      <h1>Home Page</h1>
       <Outlet />
     </div>
   );
