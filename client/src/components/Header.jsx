@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import "../Styles/Header.scss";
 import { LoginButton } from "../components/LoginButton";
 import LogoutButton from '../components/LogoutButton';
+import Profile from './Profile'
 
 const Layout = () => {
   return (
@@ -28,13 +29,7 @@ const Layout = () => {
 
         <LoginButton />
         <LogoutButton />
-        {/* <NavLink
-          to="/login"
-          className="navBar__link"
-          activeClassName="navBar__selected"
-        >
-          Login
-        </NavLink> */}
+        <Profile />
       </nav>
     </div>
   );

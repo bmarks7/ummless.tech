@@ -2,7 +2,6 @@ import "./App.scss";
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header";
 
-import Profile from './components/Profile'
 import {useAuth0} from '@auth0/auth0-react'
 
 function App() {
@@ -13,7 +12,6 @@ function App() {
   return (
     <div>
       <Header />
-      <Profile />
       <Outlet />
     </div>
   );
