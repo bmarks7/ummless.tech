@@ -1,0 +1,31 @@
+@import "Variables.scss";
+
+.navBar {
+  display: flex;
+  background-color: $darkest-blue;
+  color: $white;
+  font-family: sans-serif;
+
+  &__titleContainer {
+    margin-left: 0.5em;
+    padding: none;
+  }
+
+  &__container {
+    margin-left: auto;
+    margin-right: 0.5em;
+    display: flex;
+    align-items: center;
+  }
+
+  &__link {
+    margin: 0 1em;
+    font-size: 1.5em;
+    text-decoration: none;
+    color: $white;
+  }
+
+  &__selected {
+    text-decoration: underline;
+  }
+}
