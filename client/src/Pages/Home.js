@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import SpeechSummary from "../components/SpeechSummary";
 
-export default class Home extends Component {
-    render() {
-        return (
-            <div>
-                <h1>Home</h1>
-            </div>
-        )
-    }
-}
+const Home = () => {
+  return (
+    <div>
+      <SpeechSummary />
+    </div>
+  );
+};
+
+export default Home;
