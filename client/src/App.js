@@ -1,9 +1,12 @@
-import './App.css';
+import './App.scss';
+import { Outlet, Link } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
-      <h1>hello</h1>
+      <h1>Home</h1>
+      <Link to='/progress'>Progress</Link>
+      <Outlet />
     </div>
   );
 }
