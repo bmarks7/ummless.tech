@@ -10,8 +10,9 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route exact path="/" element={<App/>} />
-        <Route exact path="/progress" element={<Progress />} />
+        <Route exact path="/" element={<App />}>
+          <Route exact path="/progress" element={<Progress />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
