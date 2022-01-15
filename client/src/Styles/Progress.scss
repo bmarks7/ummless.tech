@@ -1,0 +1,32 @@
+@import './Variables.scss';
+
+.progressPage{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__pastSpeeches{
+        margin-top: 5vh;
+        margin-bottom: 10vh;
+    }
+
+    &__progressHeader, &__pastSpeechesHeader{
+        font-size: 2rem;
+        color: $dark-blue;
+    }
+
+    &__progressCharts{
+        width: 80vw;
+        height: 100rem;
+        background-color: $dark-blue;
+        padding: 2rem;
+    }
+
+    &__pastSpeechesTable{
+        width: 80vw;
+        height: 40vh;
+        background-color: $dark-blue;
+    }
+}
+
+
