@@ -1,5 +1,6 @@
 from textwrap import fill
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import os
 import requests
@@ -8,6 +9,7 @@ from datetime import datetime
 import re
 
 app = Flask(__name__)
+CORS(app)
 
 # app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://postgres:123456@localhost:5555/ummless"
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -37,12 +39,13 @@ class Speech(db.Model):
   userId=db.Column(db.Integer,db.ForeignKey('user.userId'))
   score=db.Column(db.Integer)
   averageWPM=db.Column(db.Integer)
-  averageSentiment=db.Column(db.Integer)
+  averageSentiment=db.Column(db.Float)
   numFillerWords=db.Column(db.Integer)
+  duration=db.Column(db.Integer)
 
   speechDetails = db.relationship('SpeechDetails', backref='Speech', lazy=True, uselist=False)
 
-  def __init__(self,link,createdAt,userId,score,averageWPM,averageSentiment,numFillerWords):
+  def __init__(self,link,createdAt,userId,score,averageWPM,averageSentiment,numFillerWords,duration):
     self.link=link
     self.createdAt=createdAt
     self.userId=userId
@@ -50,6 +53,7 @@ class Speech(db.Model):
     self.averageWPM=averageWPM
     self.averageSentiment=averageSentiment
     self.numFillerWords=numFillerWords
+    self.duration=duration
 
 
 class SpeechDetails(db.Model):
@@ -76,14 +80,28 @@ class SpeechDetails(db.Model):
 
 
 def return_summary(speechId):
-  return ''
+  speech = Speech.query.filter_by(speechId=speechId).first()
+  filler_words_per_minute = speech.numFillerWords / (speech.duration / 60)
+  return jsonify(filler_words_per_minute=filler_words_per_minute, speaking_speed=speech.averageWPM, \
+    average_sentiment=speech.averageSentiment, score=speech.score)
 
 def return_in_depth_analysis(speechId):
-  return ''
+  speechDetailsList = SpeechDetails.query.filter_by(speechId=speechId).all()
+  print("Length of speechDetailsList = {}".format(speechDetailsList))
+  inDepthMetrics = []
+  for speechDetails in speechDetailsList:
+    textChunk = speechDetails.textChunk
+    sentiment = speechDetails.sentiment
+    duration = (speechDetails.endTime - speechDetails.startTime) / 1000
+    speed = speechDetails.speechRate
+    inDepthMetric = {'textChunk': textChunk, 'sentiment': sentiment, 'duration': duration, 'speed': speed}
+    print("inDepthMetric = {}".format(inDepthMetric))
+    inDepthMetrics.append(inDepthMetric)
+  return jsonify(inDepthMetrics)
 
 def get_average_sentiment(sentiment_analysis_results):
   size = len(sentiment_analysis_results)
-  total_sentiment = 0
+  total_sentiment = 0.0
   if size != 0:
     for sentiment in sentiment_analysis_results:
       if sentiment['sentiment'] == 'POSITIVE':
@@ -106,11 +124,11 @@ def store_analysis_data(response):
   userId = new_user.userId
 
   score = 0
-  averageWPM = len(response['words']) / (response['audio_duration'] * 60)
+  averageWPM = len(response['words']) / (response['audio_duration'] / 60)
   averageSentiment = get_average_sentiment(response['sentiment_analysis_results'])
   numFillerWords = get_num_filler_words(response['text'])
   new_speech = Speech(link='', createdAt=datetime.now(), score=score, userId=userId, averageWPM=averageWPM, \
-    averageSentiment=averageSentiment, numFillerWords=numFillerWords)
+    averageSentiment=averageSentiment, numFillerWords=numFillerWords, duration=response['audio_duration'])
   db.session.add(new_speech)
   db.session.commit()
   speechId = new_speech.speechId
@@ -124,11 +142,12 @@ def store_analysis_data(response):
       sentimentValue = -1
     fillerCount = get_num_filler_words(sentiment['text'])
     wordCount = len(re.findall(r'\w+', sentiment['text']))
+    speechRate = wordCount / ((sentiment['end'] - sentiment['start']) / 1000 / 60)
     new_speech_details = SpeechDetails(speechId=speechId, textChunk=textChunk, sentiment=sentimentValue, startTime=sentiment['start'], \
-      endTime=sentiment['end'], fillerCount=fillerCount, wordCount=wordCount, speechRate=0)
+      endTime=sentiment['end'], fillerCount=fillerCount, wordCount=wordCount, speechRate=speechRate)
     db.session.add(new_speech_details)
   db.session.commit()
-  return ''
+  return speechId
 
 auth_key = 'f8173fb4ee264143bc2c88ac85fd0cfc'
 
@@ -174,7 +193,7 @@ def upload_audio_file():
     with open(_id + '.txt', 'w') as f:
         f.write(polling_response.json()['text'])
     print('Transcript saved to', _id, '.txt')
-  return '', 204
+  return jsonify(id = _id)
 
 # Call this after the post request above to know whether the upload and analysis is complete.
 # Call all other APIs only once this method returns 'completed'
@@ -185,20 +204,21 @@ def get_transcript():
   polling_response = requests.get(endpoint, headers=headers)
 
   if polling_response.json()['status'] == 'completed':
-    store_analysis_data(polling_response.json())
+    speechId = store_analysis_data(polling_response.json())
+    return jsonify(status = polling_response.json()['status'], speechId=speechId)
   return jsonify(status = polling_response.json()['status'])
 
 @app.route('/summary')
 def get_summary():
   speechId = request.args.get('speechId')
   # userId = request.args.get('userId')
-  return jsonify(return_summary(speechId))
+  return return_summary(speechId)
 
 @app.route('/in_depth_analysis')
 def get_in_depth_analysis():
   speechId = request.args.get('speechId')
   # userId = request.args.get('userId')
-  return jsonify(return_in_depth_analysis(speechId))
+  return return_in_depth_analysis(speechId)
 
 if __name__ == '__main__':
     app.run(debug=True)
