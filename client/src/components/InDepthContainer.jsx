@@ -1,56 +1,37 @@
-import { useState } from "react";
 import InDepthCard from "./InDepthCard";
-import { data } from "../data";
 import "../Styles/InDepthSummary.scss";
 
-const InDepthContainer = () => {
-  const [speechData, setSpeechData] = useState(null);
-
-  const fetchData = () => {
-    const analysisResults = data.sentiment_analysis_results;
-    setSpeechData(analysisResults);
-  };
-
+const InDepthContainer = ({ speechData, status }) => {
   return (
     <div className="inDepthContainer">
-      <h2 onClick={fetchData} className="inDepthTitle">
-        In-Depth Speech Analysis
-      </h2>
+      <h2 className="inDepthTitle">In-Depth Speech Analysis</h2>
       <div className="headingContainer">
         <h3 className="sentimentHeading">Sentiment</h3>
         <h3>Speech Section</h3>
       </div>
       {speechData &&
         speechData.map((chunk, index) => {
-          const elapsedTime = (
-            (chunk["end"] - chunk["start"]) /
-            1000 /
-            60
-          ).toFixed(2);
-          const speed = (chunk["text"].split(" ").length / elapsedTime).toFixed(
-            2
-          );
           let sentiment;
           switch (chunk["sentiment"]) {
-            case "NEUTRAL":
+            case 0:
               sentiment = "=";
               break;
-            case "NEGATIVE":
+            case -1:
               sentiment = "-";
               break;
-            case "POSITIVE":
+            case 1:
               sentiment = "+";
               break;
             default:
               sentiment = "=";
               break;
           }
-          const text = chunk["text"];
+          const text = chunk["textChunk"];
           return (
             <InDepthCard
               key={index}
-              speed={speed}
-              elapsedTime={elapsedTime}
+              speed={chunk["speed"]}
+              elapsedTime={chunk["duration"]}
               sentiment={sentiment}
               text={text}
             />

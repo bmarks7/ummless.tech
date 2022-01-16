@@ -52,7 +52,7 @@ const InDepthCard = ({ speed, elapsedTime, sentiment, text }) => {
             }
           >
             {" "}
-            {speed} wpm
+            {speed.toFixed(2)} wpm
           </p>
         </div>
       </div>
