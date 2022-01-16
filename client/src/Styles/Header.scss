@@ -1,5 +1,12 @@
 @import "Variables.scss";
 
+@mixin navLink {
+  margin: 0 1em;
+  font-size: 1.5em;
+  text-decoration: none;
+  color: $white;
+}
+
 .navBar {
   display: flex;
   background-color: $darkest-blue;
@@ -18,13 +25,11 @@
   }
 
   &__link {
-    margin: 0 1em;
-    font-size: 1.5em;
-    text-decoration: none;
-    color: $white;
+    @include navLink;
   }
 
   &__selected {
+    @include navLink;
     text-decoration: underline;
   }
 }
