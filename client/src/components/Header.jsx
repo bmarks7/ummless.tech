@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
 import "../Styles/Header.scss";
 import { LoginButton } from "./LoginButton";
-import LogoutButton from './LogoutButton';
-import Profile from './Profile'
+import LogoutButton from "./LogoutButton";
+import Profile from "./Profile";
 
 const Layout = () => {
   return (
@@ -14,15 +14,17 @@ const Layout = () => {
       <nav className="navBar__container">
         <NavLink
           to="/"
-          className="navBar__link"
-          activeClassName="navBar__selected"
+          className={({ isActive }) =>
+            isActive ? "navBar__selected" : "navBar__link"
+          }
         >
           Home
         </NavLink>
         <NavLink
           to="/progress"
-          className="navBar__link"
-          activeClassName="navBar__selected"
+          className={({ isActive }) =>
+            isActive ? "navBar__selected" : "navBar__link"
+          }
         >
           Progress
         </NavLink>
