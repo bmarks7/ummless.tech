@@ -1,0 +1,33 @@
+@import "Variables";
+
+.inDepthContainer {
+  color: $white;
+  margin: auto;
+  height: 60vh;
+  width: 40vw;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  background-color: $dark-blue;
+  border-radius: 1rem;
+}
+
+.inDepthContainer::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.inDepthTitle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0;
+}
+
+.headingContainer {
+  display: flex;
+  justify-content: left;
+}
+
+.sentimentHeading {
+  margin-left: 1rem;
+  flex-basis: 40%;
+}

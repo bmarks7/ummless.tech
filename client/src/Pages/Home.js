@@ -1,4 +1,5 @@
 import FileUpload from "../components/FileUpload";
+import InDepthContainer from "../components/InDepthContainer";
 import SpeechSummary from "../components/SpeechSummary";
 
 const Home = () => {
@@ -6,6 +7,7 @@ const Home = () => {
     <div>
       <FileUpload />
       <SpeechSummary />
+      <InDepthContainer />
     </div>
   );
 };

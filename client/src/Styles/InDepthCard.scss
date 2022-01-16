@@ -1,0 +1,59 @@
+@import "Variables";
+
+@mixin sentiment {
+  font-size: 2em;
+  font-weight: 900;
+}
+
+.inDepthCard {
+  background-color: $darkest-blue;
+  border-radius: 1rem;
+  margin: 0.5rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.inDepthCardRight {
+  flex-basis: 60%;
+}
+
+.inDepthCardDetails {
+  display: flex;
+}
+
+.elapsedTime {
+  margin-right: 1rem;
+}
+
+.sentimentSymbol {
+  @include sentiment;
+
+  &__positive {
+    @include sentiment;
+    color: #2cb32d;
+  }
+  &__negative {
+    @include sentiment;
+    color: #f76b6b;
+  }
+}
+
+.speed {
+  color: $white;
+
+  &__positive {
+    color: #2cb32d;
+  }
+  &__negative {
+    color: #f76b6b;
+  }
+}
+
+.regularWord {
+  color: $white;
+}
+
+.fillerWord {
+  color: #f76b6b;
+}
