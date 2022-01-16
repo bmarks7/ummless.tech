@@ -1,0 +1,21 @@
+@import './Variables.scss';
+
+.profile{
+    display: flex;
+
+    &__img{
+        width: 3rem;
+        height: 3rem;
+    }
+
+    &__nameAndEmail{
+        margin-left: .5rem;
+        &__name{
+            font-weight: bold;
+        }
+
+        &__email{
+
+        }
+    }
+}

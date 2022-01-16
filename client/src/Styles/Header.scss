@@ -1,0 +1,35 @@
+@import "Variables.scss";
+
+@mixin navLink {
+  margin: 0 1em;
+  font-size: 1.5em;
+  text-decoration: none;
+  color: $white;
+}
+
+.navBar {
+  display: flex;
+  background-color: $darkest-blue;
+  color: $white;
+
+  &__titleContainer {
+    margin-left: 0.5em;
+    padding: none;
+  }
+
+  &__container {
+    margin-left: auto;
+    margin-right: 0.5em;
+    display: flex;
+    align-items: center;
+  }
+
+  &__link {
+    @include navLink;
+  }
+
+  &__selected {
+    @include navLink;
+    text-decoration: underline;
+  }
+}

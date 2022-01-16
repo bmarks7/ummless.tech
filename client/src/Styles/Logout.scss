@@ -1,0 +1,9 @@
+@import './Variables.scss';
+
+.logoutBtn{
+    margin: 0 1em;
+    font-size: 1.5em;
+    text-decoration: none;
+    color: $white;
+    cursor: pointer;
+}
