@@ -1,0 +1,21 @@
+@import "Variables";
+
+.pageContainer {
+  display: flex;
+  align-items: center;
+  height: 86vh;
+}
+
+.speechSummary {
+  margin: auto;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  width: 50vw;
+}
+
+.right {
+  width: 50vw;
+}
