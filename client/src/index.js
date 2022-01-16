@@ -11,13 +11,7 @@ const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
 ReactDOM.render(
   <Auth0Provider domain={domain} clientId={clientId} redirectUri={window.location.origin}>
-    <BrowserRouter>
-      <Routes>
-        <Route exact path="/" element={<App />}>
-          <Route exact path="/progress" element={<Progress />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <App />
   </Auth0Provider>,
   document.getElementById("root")
 );
