@@ -1,5 +1,4 @@
 import axios from "axios";
-import useInterval from "../util/utils";
 import { useState, useEffect } from "react";
 import FileUpload from "../components/FileUpload";
 import InDepthContainer from "../components/InDepthContainer";
@@ -9,6 +8,8 @@ import "../Styles/HomePage.scss";
 const baseURL = "http://127.0.0.1:5000";
 const upload = "/upload";
 const transcript = "/transcript";
+const summary = "/summary";
+const inDepth = "/in_depth_analysis";
 
 const Home = () => {
   const [file, setFile] = useState({});
@@ -43,18 +44,58 @@ const Home = () => {
       return "ERROR";
     }
   };
-  // let responseStatus = await pollForAnalysisComplete();
 
-  // while (responseStatus.status === "processing") {
-  //   useInterval(async () => {
-  //     responseStatus = await pollForAnalysisComplete();
-  //   }, 3000);
-  // }
+  useEffect(() => {
+    if (status === "not-started" || status === "done") {
+      return;
+    }
 
-  // if (responseStatus.status === "completed") {
-  //   setSpeechId(responseStatus.speechId);
-  // }
-  // console.log(speechId);
+    const pollingInterval = setInterval(async () => {
+      const responseStatus = await pollForAnalysisComplete();
+      if (responseStatus.status === "completed") {
+        setStatus("done");
+        setSpeechId(responseStatus.speechId);
+      }
+      console.log(responseStatus);
+    }, 3000);
+    return () => clearInterval(pollingInterval);
+  }, [status]);
+
+  const [summaryData, setSummaryData] = useState(null);
+  useEffect(() => {
+    const getSpeechSummary = async () => {
+      try {
+        const response = await axios.get(
+          baseURL + summary + `?speechId=${speechId}`
+        );
+        setSummaryData(response.data);
+        console.log(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (status === "done" && speechId !== null) {
+      getSpeechSummary();
+    }
+  }, [speechId, status]);
+
+  const [inDepthData, setInDepthData] = useState(null);
+  useEffect(() => {
+    const getSpeechDetails = async () => {
+      try {
+        const response = await axios.get(
+          baseURL + inDepth + `?speechId=${speechId}`
+        );
+        setInDepthData(response.data);
+        console.log(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (status === "done" && speechId !== null) {
+      getSpeechDetails();
+    }
+  }, [speechId, status]);
 
   return (
     <div className="pageContainer">
@@ -66,11 +107,11 @@ const Home = () => {
           />
         </div>
         <div className="speechSummary">
-          <SpeechSummary status={status} />
+          <SpeechSummary data={summaryData} status={status} />
         </div>
       </div>
       <div className="right">
-        <InDepthContainer status={status} />
+        <InDepthContainer speechData={inDepthData} status={status} />
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ const SpeechSummaryTable = ({ data, status }) => {
     return "Waiting for user to upload file";
   }
 
-  if (status === "loading") {
+  if (status === "loading" || data == null) {
     return "Analyzing...";
   } else {
     return (
@@ -17,10 +17,12 @@ const SpeechSummaryTable = ({ data, status }) => {
             </td>
             <td
               className={
-                data.fillerWPM < 3 ? "data__positive" : "data__negative"
+                data.filler_words_per_minute < 3
+                  ? "data__positive"
+                  : "data__negative"
               }
             >
-              {data.fillerWPM}
+              {data.filler_words_per_minute.toFixed(2)}
             </td>
           </tr>
           <tr>
@@ -29,12 +31,12 @@ const SpeechSummaryTable = ({ data, status }) => {
             </td>
             <td
               className={
-                data.speed >= 140 && data.speed <= 160
+                data.speaking_speed >= 140 && data.speaking_speed <= 160
                   ? "data__positive"
                   : "data__negative"
               }
             >
-              {data.speed}
+              {data.speaking_speed.toFixed(2)}
             </td>
           </tr>
           <tr>
@@ -43,10 +45,10 @@ const SpeechSummaryTable = ({ data, status }) => {
             </td>
             <td
               className={
-                data.averageSentiment > 0 ? "data__positive" : "data__negative"
+                data.average_sentiment > 0 ? "data__positive" : "data__negative"
               }
             >
-              {data.averageSentiment}
+              {data.average_sentiment}
             </td>
           </tr>
           <tr>
