@@ -115,6 +115,28 @@ def get_num_filler_words(text):
   count = sum(1 for match in re.finditer(r"\buh{0,3}\b|\bum{0,3}\b", text))
   return count
 
+def return_user_history(userId):
+  speechList = Speech.query.filter_by(userId=userId).all()
+  userHistoryList = []
+  for speech in speechList:
+    date = speech.createdAt
+    score = speech.score
+    numFillerWords = speech.numFillerWords
+    averageWPM = speech.averageWPM
+    averageSentiment = speech.averageSentiment
+    userHistory = {'date': date, 'score': score, 'numFillerWords': numFillerWords, 'averageWPM': averageWPM, \
+      'averageSentiment': averageSentiment}
+    print("inDepthMetric = {}".format(userHistory))
+    userHistoryList.append(userHistory)
+  return jsonify(userHistoryList)
+
+def calculate_score(fillerWPM, speakingSpeed, averageSentiment):
+  speakingSpeedScore = 100 - abs(speakingSpeed - 140)
+  fillerWPMScore = 100 - fillerWPM
+  # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+  averageSentimentScore = ((averageSentiment + 1) * 100 / 2)
+  return (speakingSpeedScore + fillerWPMScore + averageSentimentScore) / 3
+
 def store_analysis_data(response):
   # response = json.loads(response)
 
@@ -123,10 +145,10 @@ def store_analysis_data(response):
   db.session.commit()
   userId = new_user.userId
 
-  score = 0
   averageWPM = len(response['words']) / (response['audio_duration'] / 60)
   averageSentiment = get_average_sentiment(response['sentiment_analysis_results'])
   numFillerWords = get_num_filler_words(response['text'])
+  score = calculate_score(numFillerWords / (response['audio_duration'] / 60), averageWPM, averageSentiment)
   new_speech = Speech(link='', createdAt=datetime.now(), score=score, userId=userId, averageWPM=averageWPM, \
     averageSentiment=averageSentiment, numFillerWords=numFillerWords, duration=response['audio_duration'])
   db.session.add(new_speech)
@@ -147,7 +169,7 @@ def store_analysis_data(response):
       endTime=sentiment['end'], fillerCount=fillerCount, wordCount=wordCount, speechRate=speechRate)
     db.session.add(new_speech_details)
   db.session.commit()
-  return speechId
+  return {'speechId': speechId, 'userId': userId}
 
 auth_key = 'f8173fb4ee264143bc2c88ac85fd0cfc'
 
@@ -204,8 +226,10 @@ def get_transcript():
   polling_response = requests.get(endpoint, headers=headers)
 
   if polling_response.json()['status'] == 'completed':
-    speechId = store_analysis_data(polling_response.json())
-    return jsonify(status = polling_response.json()['status'], speechId=speechId)
+    # speechId = store_analysis_data(polling_response.json())
+    res = store_analysis_data(polling_response.json())
+    # return jsonify(status = polling_response.json()['status'], speechId=speechId)
+    return jsonify(res)
   return jsonify(status = polling_response.json()['status'])
 
 @app.route('/summary')
@@ -219,6 +243,12 @@ def get_in_depth_analysis():
   speechId = request.args.get('speechId')
   # userId = request.args.get('userId')
   return return_in_depth_analysis(speechId)
+
+@app.route('/history')
+def get_user_history():
+  # speechId = request.args.get('speechId')
+  userId = request.args.get('userId')
+  return return_user_history(userId)
 
 if __name__ == '__main__':
     app.run(debug=True)
