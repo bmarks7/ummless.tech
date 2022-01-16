@@ -2,8 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
-import Progress from "./Pages/Progress";
 import {Auth0Provider} from '@auth0/auth0-react';
 
 const domain = process.env.REACT_APP_AUTH0_DOMAIN;

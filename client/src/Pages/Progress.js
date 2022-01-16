@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Graph from '../components/Graphs';
-import Table from '../components/Table.tsx'
+import Table from '../components/Table'
 import '../Styles/Progress.scss'
 
 export default class Progress extends Component {
