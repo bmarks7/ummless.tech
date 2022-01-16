@@ -24,7 +24,7 @@ const SpeechSummaryTable = ({ data }) => {
           </td>
           <td
             className={
-              data.speed > 120 && data.speed < 140
+              data.speed >= 140 && data.speed <= 160
                 ? "data__positive"
                 : "data__negative"
             }
