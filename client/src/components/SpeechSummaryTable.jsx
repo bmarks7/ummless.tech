@@ -58,7 +58,7 @@ const SpeechSummaryTable = ({ data, status }) => {
             <td
               className={data.score >= 70 ? "data__positive" : "data__negative"}
             >
-              <h2>{data.score}</h2>
+              <h2>{data.score.toFixed(0)}</h2>
             </td>
           </tr>
         </tbody>
