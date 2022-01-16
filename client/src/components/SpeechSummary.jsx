@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import SpeechSummaryTable from "./SpeechSummaryTable";
 import "../Styles/SpeechSummary.scss";
 
-const SpeechSummary = () => {
+const SpeechSummary = ({ status }) => {
   const [data, setData] = useState(null);
   useEffect(() => {
     setTimeout(() => {
@@ -18,7 +18,7 @@ const SpeechSummary = () => {
   return (
     <div>
       <h1 className="title">Speech Summary</h1>
-      <SpeechSummaryTable data={data} />
+      <SpeechSummaryTable data={data} status={status} />
     </div>
   );
 };
