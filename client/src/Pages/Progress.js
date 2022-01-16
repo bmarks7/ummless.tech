@@ -15,7 +15,7 @@ export default class Progress extends Component {
                 </div>
 
                 <div className="progressPage__pastSpeeches">
-                    <p className="progressPage__pastSpeechesHeader">Past Speeches</p>
+                    <p className="progressPage__pastSpeechesHeader">Past Speeches(click on a row to get more details)</p>
                     <div className="progressPage__pastSpeechesTable">
                         <Table />
                     </div>

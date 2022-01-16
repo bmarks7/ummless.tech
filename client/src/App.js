@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Home from "./Pages/Home";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import Progress from './Pages/Progress'
+import SpeechDetails from "./Pages/SpeechDetails";
 import {useState} from 'react'
 
 import {useAuth0} from '@auth0/auth0-react'
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />}/>
         <Route exact path="/progress" element={<Progress />} />
+        <Route exact path="/details/:id" element={<SpeechDetails />} />
       </Routes>
 
       <Outlet />
