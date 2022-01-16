@@ -2,9 +2,13 @@ import "./App.scss";
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./Pages/Home";
-import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
-import Progress from "./Pages/Progress";
-import { useAuth0 } from "@auth0/auth0-react";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
+import Progress from './Pages/Progress'
+import SpeechDetails from "./Pages/SpeechDetails";
+import {useState} from 'react'
+
+import {useAuth0} from '@auth0/auth0-react'
+
 
 function App() {
   const { isLoading } = useAuth0();
@@ -38,6 +42,15 @@ function App() {
           exact
           path="/login"
           element={<h2>Please login to practice your speeches!</h2>}
+        />
+        <Route
+          exact
+          path="/details/:id"
+          element={
+            <RequireAuth>
+              <SpeechDetails />
+            </RequireAuth>
+          }
         />
         <Route path="*" element={<p>There's nothing here!</p>} />
       </Routes>
