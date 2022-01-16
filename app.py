@@ -169,7 +169,8 @@ def store_analysis_data(response):
       endTime=sentiment['end'], fillerCount=fillerCount, wordCount=wordCount, speechRate=speechRate)
     db.session.add(new_speech_details)
   db.session.commit()
-  return {'speechId': speechId, 'userId': userId}
+  # return {'speechId': speechId, 'userId': userId}
+  return speechId
 
 auth_key = 'f8173fb4ee264143bc2c88ac85fd0cfc'
 
@@ -226,10 +227,10 @@ def get_transcript():
   polling_response = requests.get(endpoint, headers=headers)
 
   if polling_response.json()['status'] == 'completed':
-    # speechId = store_analysis_data(polling_response.json())
-    res = store_analysis_data(polling_response.json())
-    # return jsonify(status = polling_response.json()['status'], speechId=speechId)
-    return jsonify(res)
+    speechId = store_analysis_data(polling_response.json())
+    # res = store_analysis_data(polling_response.json())
+    return jsonify(status = polling_response.json()['status'], speechId=speechId)
+    # return jsonify(res)
   return jsonify(status = polling_response.json()['status'])
 
 @app.route('/summary')
