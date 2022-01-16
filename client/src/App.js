@@ -2,33 +2,55 @@ import "./App.scss";
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./Pages/Home";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
-import Progress from './Pages/Progress'
-import {useState} from 'react'
-
-import {useAuth0} from '@auth0/auth0-react'
+import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
+import Progress from "./Pages/Progress";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
-  const {isLoading, isAuthenticated} = useAuth0();
+  const { isLoading } = useAuth0();
 
-  const [userAuth, setUserAuth] = useState(isAuthenticated)
-
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <BrowserRouter>
-      
       <Header />
-      
+
       <Routes>
-        <Route exact path="/" element={<Home />}/>
-        <Route exact path="/progress" element={<Progress />} />
+        <Route
+          exact
+          path="/"
+          element={
+            <RequireAuth>
+              <Home />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path="/progress"
+          element={
+            <RequireAuth>
+              <Progress />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path="/login"
+          element={<h2>Please login to practice your speeches!</h2>}
+        />
+        <Route path="*" element={<p>There's nothing here!</p>} />
       </Routes>
 
       <Outlet />
-    
     </BrowserRouter>
   );
+}
+
+function RequireAuth({ children }) {
+  const { isAuthenticated } = useAuth0();
+
+  return isAuthenticated === true ? children : <Navigate to="/login" replace />;
 }
 
 export default App;
